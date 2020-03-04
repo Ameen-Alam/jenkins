@@ -6,7 +6,7 @@ pipeline {
             }
      }
     environment {
-        APP = "jenkins"
+        APP = "ameenalam/node"
         PORT="3000"
         HOST="localhost"
     }
@@ -26,7 +26,7 @@ pipeline {
         stage("Build Stage"){
             steps{
                 // docker image creation
-                sh "docker build -t ${APP}:${BUILD_NUMBER} ."
+                sh "docker build -t ${APP}:jenkins ."
             }
         }
         stage('Deploy') {
@@ -36,7 +36,7 @@ pipeline {
                 */
                 sh """
                 docker rm ${APP} --force || true
-                docker run -d --name ${APP} -p ${PORT}:3000 ${APP}:${BUILD_NUMBER}
+                docker run -d --name ${APP} -p ${PORT}:3000 ${APP}:jenkins
                 """
             }
         }
@@ -45,13 +45,13 @@ pipeline {
         success {
             mail to: 'ameenalam202@gmail.com', from: 'ameenalam202@gmail.com',
                 subject: "New build for '${env.JOB_NAME}' is Successful!!",
-                body: "Job Succeed - \"${env.JOB_NAME}\" build: ${env.BUILD_NUMBER}\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
+                body: "Job Succeed - \"${env.JOB_NAME}\" build: jenkins\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
             echo "App can be accessed from http://${HOST}:${PORT}"
         }
          failure {
             mail to: 'ameenalam202@gmail.com', from: 'ameenalam202@gmail.com',
                 subject: "New build for '${env.JOB_NAME}' is failed!!",
-                body: "Job Failed - \"${env.JOB_NAME}\" build: ${env.BUILD_NUMBER}\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
+                body: "Job Failed - \"${env.JOB_NAME}\" build: jenkins\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
         }
     }
 }
