@@ -1,0 +1,57 @@
+pipeline {
+   agent {
+         docker{
+             // any appropriate image can be use here
+            image 'aamirpinger/node:docker'
+            }
+     }
+    environment {
+        APP = "ap-jenkins-basic-nodejs"
+        PORT="3000"
+        HOST="localhost"
+    }
+    stages {
+        stage('Initialinzing App') {
+            steps {
+                // install  dependencies
+                sh "npm install"
+            }
+        }
+        stage("Testing Stage"){
+            steps{
+               // Run your unit  tests
+               sh "npm run test"
+            }
+        }
+        stage("Build Stage"){
+            steps{
+                // docker image  creation
+                sh "docker build -t ${APP}:${BUILD_NUMBER} ."
+            }
+        }
+        stage('Deploy') {
+            steps {
+                /*
+                * Multiline strings can be used for larger  scripts.
+                */
+                sh """
+                docker rm ${APP} --force || true
+                docker run -d --name ${APP} -p ${PORT}:3000 ${APP}:${BUILD_NUMBER}
+                """
+            }
+        }
+    }
+     post {
+        success {
+            mail to: 'aamirpinger@gmail.com', from: 'aamirpinger@gmail.com',
+                subject: "New build for '${env.JOB_NAME}' is Successful!!",
+                body: "Job Succeed - \"${env.JOB_NAME}\" build: ${env.BUILD_NUMBER}\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
+            echo "App can be accessed from http://${HOST}:${PORT}"
+        }
+         failure {
+            mail to: 'aamirpinger@gmail.com', from: 'aamirpinger@gmail.com',
+                subject: "New build for '${env.JOB_NAME}' is failed!!",
+                body: "Job Failed - \"${env.JOB_NAME}\" build: ${env.BUILD_NUMBER}\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
+        }
+    }
+}
