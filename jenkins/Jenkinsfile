@@ -35,6 +35,7 @@ pipeline {
                 * Multiline strings can be used for larger  scripts.
                 */
                 sh """
+                docker rm ${APP} --force || true
                 docker run -d --name ${APP} -p ${PORT}:3000 ${APP}:${BUILD_NUMBER}
                 """
             }
