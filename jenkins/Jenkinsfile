@@ -41,17 +41,4 @@ pipeline {
             }
         }
     }
-     post {
-        success {
-            mail to: 'ameenalam202@gmail.com', from: 'ameenalam202@gmail.com',
-                subject: "New build for",
-                body: "Job Succeed -"
-            echo "App can be accessed"
-        }
-         failure {
-            mail to: 'ameenalam202@gmail.com', from: 'ameenalam202@gmail.com',
-                subject: "New build for",
-                body: "Job Failed"
-        }
-    }
 }
