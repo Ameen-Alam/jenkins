@@ -44,14 +44,14 @@ pipeline {
      post {
         success {
             mail to: 'ameenalam202@gmail.com', from: 'ameenalam202@gmail.com',
-                subject: "New build for '${env.JOB_NAME}' is Successful!!",
-                body: "Job Succeed - \"${env.JOB_NAME}\" build: ${env.BUILD_NUMBER}\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
-            echo "App can be accessed from http://${HOST}:${PORT}"
+                subject: "New build for",
+                body: "Job Succeed -"
+            echo "App can be accessed"
         }
          failure {
             mail to: 'ameenalam202@gmail.com', from: 'ameenalam202@gmail.com',
-                subject: "New build for '${env.JOB_NAME}' is failed!!",
-                body: "Job Failed - \"${env.JOB_NAME}\" build: ${env.BUILD_NUMBER}\n\nView the log at:\n ${env.BUILD_URL}\n\nBlue Ocean:\n${env.RUN_DISPLAY_URL}"
+                subject: "New build for",
+                body: "Job Failed"
         }
     }
 }
