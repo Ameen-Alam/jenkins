@@ -36,6 +36,8 @@ pipeline {
                 */
                 sh """
                 docker rm ${APP} --force || true
+                docker tag ${APP}:${BUILD_NUMBER} ameenalam/${APP}:test
+                docker push ameenalam/${APP}:test
                 docker run -d --name ${APP} -p ${PORT}:3000 ${APP}:${BUILD_NUMBER}
                 """
             }
